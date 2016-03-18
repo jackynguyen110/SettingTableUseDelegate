@@ -16,22 +16,48 @@ class PreferenceViewController: UIViewController,UITableViewDataSource, Preferen
     
     var prefValue: [PrefRowIdentifier: Bool] = [:]
     
+    var currentPrefs: Preferences!{
+        didSet {
+            prefValue[.AutoRefresh] = currentPrefs.autoRefresh
+            prefValue[.PlaySounds]  = currentPrefs.playSounds
+            prefValue[.ShowPhotos]  = currentPrefs.showPhotos
+            tableView?.reloadData()
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        currentPrefs = Preferences()
+        tableView.dataSource = self
 
         // Do any additional setup after loading the view.
     }
     
+    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+        return StructOfTable.count
+    }
+    
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 3
+        return StructOfTable[section].count
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        <#code#>
+        let cell = tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath) as! PrefereneSwitchCell
+        
+        let prefIdentifier = StructOfTable[indexPath.section][indexPath.row]
+        
+        cell.preRowIdentifier = prefIdentifier
+        
+        cell.onOffSwitch.on =  prefValue[prefIdentifier]!
+        
+        cell.delegate = self
+        
+        return cell
     }
     
     func onToggleSwitch(cell: PrefereneSwitchCell, newValue: Bool) {
-        <#code#>
+        prefValue[cell.preRowIdentifier] = newValue
+        print(prefValue)
     }
 
 

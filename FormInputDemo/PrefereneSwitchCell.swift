@@ -30,7 +30,7 @@ class PrefereneSwitchCell: UITableViewCell {
         }
     }
 
-    @IBAction func onOffSwitchTapped(sender: AnyObject) {
+    @IBAction func onOffSwitchTapped() {
         delegate?.onToggleSwitch(self, newValue: onOffSwitch.on)
     }
     
